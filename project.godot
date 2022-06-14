@@ -8,10 +8,29 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "",
+"class": "GitAPI",
+"language": "NativeScript",
+"path": "res://addons/godot-git-plugin/git_api.gdns"
+} ]
+_global_script_class_icons={
+"GitAPI": ""
+}
+
 [application]
 
 config/name="TabletopSimulator2D"
 config/icon="res://icon.png"
+
+[editor]
+
+version_control/autoload_on_startup=true
+version_control/plugin_name="GitAPI"
+
+[gdnative]
+
+singletons=[ "res://addons/godot-git-plugin/git_api.gdnlib" ]
 
 [gui]
 
