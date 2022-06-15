@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/Sandbox.cs" type="Script" id=1]
+[ext_resource path="res://icon (copie).png" type="Texture" id=2]
+[ext_resource path="res://icon.png" type="Texture" id=3]
+[ext_resource path="res://nodes/Token.tscn" type="PackedScene" id=4]
+
+[node name="Root" type="Node2D"]
+
+[node name="SandboxLogic" type="Node2D" parent="."]
+script = ExtResource( 1 )
+ElementPath = NodePath("../Grid/Token1")
+
+[node name="Grid" parent="." instance=ExtResource( 4 )]
+IsRoot = true
+
+[node name="Token1" parent="Grid" instance=ExtResource( 4 )]
+position = Vector2( 403, 178 )
+texture = ExtResource( 2 )
+
+[node name="Token2" parent="Grid/Token1" instance=ExtResource( 4 )]
+position = Vector2( 34, 32 )
+texture = ExtResource( 3 )
+
+[node name="Token3" parent="Grid" instance=ExtResource( 4 )]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 92, 254 )
+texture = ExtResource( 2 )

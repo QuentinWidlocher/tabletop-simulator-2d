@@ -21,7 +21,7 @@ _global_script_class_icons={
 [application]
 
 config/name="TabletopSimulator2D"
-run/main_scene="res://Scenes/Sandbox.tscn"
+run/main_scene="res://scenes/Sandbox.tscn"
 config/icon="res://icon.png"
 
 [editor]

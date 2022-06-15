@@ -25,13 +25,7 @@ class Sandbox : Node
         if (element == null)
             return;
 
-        element?.Move(element.Position.x + 1, element.Position.y + 1);
-
-        GD.Print(++i);
-
-        if (i >= 200)
-        {
-            element!.Visibility = Visibility.Hidden;
-        }
+        // element.Move(element.Position.x + 1, element.Position.y + 1);
+        // element.Rotate(element.Rotation + 0.001f);
     }
 }
