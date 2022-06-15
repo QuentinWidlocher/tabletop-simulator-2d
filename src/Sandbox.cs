@@ -27,5 +27,7 @@ class Sandbox : Node
 
         // element.Move(element.Position.x + 1, element.Position.y + 1);
         // element.Rotate(element.Rotation + 0.001f);
+
+        i++;
     }
 }

@@ -23,6 +23,6 @@ position = Vector2( 34, 32 )
 texture = ExtResource( 3 )
 
 [node name="Token3" parent="Grid" instance=ExtResource( 4 )]
-modulate = Color( 1, 0, 0, 1 )
+self_modulate = Color( 1, 0, 0, 1 )
 position = Vector2( 92, 254 )
 texture = ExtResource( 2 )

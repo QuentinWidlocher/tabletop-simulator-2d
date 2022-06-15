@@ -15,16 +15,32 @@ script = ExtResource( 1 )
 scale = Vector2( 1, 1.02475 )
 
 [node name="Handle" type="Area2D" parent="."]
-modulate = Color( 0, 0, 0, 1 )
 scale = Vector2( 0.4, 0.4 )
 collision_layer = 2
 
 [node name="Sprite" type="Sprite" parent="Handle"]
+modulate = Color( 0, 1, 0.2, 1 )
+z_index = 1
 texture = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Handle"]
 position = Vector2( -1.19209e-06, 0 )
 shape = SubResource( 1 )
 
+[node name="VisibilityToggle" type="Area2D" parent="."]
+show_behind_parent = true
+scale = Vector2( 0.4, 0.4 )
+collision_layer = 2
+
+[node name="Sprite" type="Sprite" parent="VisibilityToggle"]
+modulate = Color( 1, 0, 0, 1 )
+z_index = 1
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VisibilityToggle"]
+position = Vector2( -1.19209e-06, 0 )
+shape = SubResource( 1 )
+
 [connection signal="input_event" from="TokenBody" to="." method="OnTokenBodyInputEvent"]
 [connection signal="input_event" from="Handle" to="." method="OnHandleInputEvent"]
+[connection signal="input_event" from="VisibilityToggle" to="." method="OnVisibilityToggleInputEvent"]

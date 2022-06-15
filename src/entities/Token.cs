@@ -10,24 +10,7 @@ class Token : Sprite
 
     public string Id { get; private set; }
 
-    [Export]
-    private Visibility _visibility = Visibility.Inherit;
-    public Visibility GetVisibility()
-    {
-        if (IsRoot)
-        {
-            return Visibility.Visible;
-        }
-        else if (_visibility == Visibility.Inherit)
-            return Parent.GetVisibility();
-        else
-            return _visibility;
-    }
-    public void SetVisibility(Visibility value)
-    {
-        _visibility = value;
-        UpdateVisibility();
-    }
+    public TokenVisibility Visibility { get; private set; }
 
     public Token Parent
     {
@@ -48,12 +31,18 @@ class Token : Sprite
     public Area2D TokenBody { get => GetNode<Area2D>("TokenBody"); }
     public CollisionShape2D CollisionShape2D { get => GetNode<CollisionShape2D>("TokenBody/CollisionShape2D"); }
     public Node2D Handle { get => GetNode<Node2D>("Handle"); }
+    public Node2D VisibilityToggle { get => GetNode<Node2D>("VisibilityToggle"); }
 
     private bool isHandleFocused;
 
-    public override void _Ready()
+    public Token()
     {
         Id = Guid.NewGuid().ToString();
+        Visibility = new TokenVisibility(this);
+    }
+
+    public override void _Ready()
+    {
         if ((GetParent() == null || GetParent().GetType() != typeof(Token)) && !IsRoot)
         {
             throw new InitializationException($"Token {Name} must be a child of a Token");
@@ -66,11 +55,13 @@ class Token : Sprite
             CollisionShape2D.Shape = shape;
 
             Handle.Position = new Vector2(Handle.Position.x, Handle.Position.y + shape.Extents.y);
+            VisibilityToggle.Position = new Vector2(VisibilityToggle.Position.x, VisibilityToggle.Position.y - shape.Extents.y);
         }
 
         if (IsRoot)
         {
             Handle.Visible = false;
+            VisibilityToggle.Visible = false;
 
             var shape = new RectangleShape2D();
             shape.Extents = GetViewportRect().Size;
@@ -82,12 +73,10 @@ class Token : Sprite
 
     public override void _Process(float delta)
     {
-        if (GetVisibility() == Visibility.Visible)
+        // TODO: Make this compatible with multiple players
+        if (isHandleFocused)
         {
-            if (isHandleFocused)
-            {
-                Move(GetGlobalMousePosition() - Handle.Position - Parent.Position);
-            }
+            Move(GetGlobalMousePosition() - Handle.Position - Parent.Position);
         }
     }
 
@@ -101,14 +90,18 @@ class Token : Sprite
         }
     }
 
-    public void UpdateVisibility(bool recursive = true)
+    public void UpdateVisibility(int forPlayer, EVisibility state, bool recursive = true)
     {
-        Visible = GetVisibility() == Visibility.Visible;
+        bool isVisible = state == EVisibility.Visible;
+        var newModulate = this.SelfModulate;
+        newModulate.a = isVisible ? 1f : 0.1f;
+        this.SelfModulate = newModulate;
+
         if (recursive)
         {
             foreach (Token child in Children)
             {
-                child.UpdateVisibility(recursive);
+                child.UpdateVisibility(forPlayer, state, recursive);
             }
         }
     }
@@ -147,6 +140,21 @@ class Token : Sprite
     }
 
     public void OnTokenBodyInputEvent(Node viewport, InputEvent evt, int shape_idx) { }
+
+    public void OnVisibilityToggleInputEvent(Node viewport, InputEvent evt, int shape_idx)
+    {
+        if (evt is InputEventMouseButton)
+        {
+            var mouse_button = (InputEventMouseButton)evt;
+            if (mouse_button.ButtonIndex == (int)ButtonList.Left)
+            {
+                if (mouse_button.IsPressed())
+                {
+                    Visibility.Toggle(1);
+                }
+            }
+        }
+    }
 
     private void changeParent(Token newParent)
     {
