@@ -19,6 +19,7 @@ scale = Vector2( 1, 1.02475 )
 position = Vector2( 0, 28 )
 scale = Vector2( 0.4, 0.4 )
 collision_layer = 2
+monitorable = false
 
 [node name="Sprite" type="Sprite" parent="Handle"]
 scale = Vector2( 0.507812, 0.507812 )
@@ -34,6 +35,7 @@ show_behind_parent = true
 position = Vector2( 0, -30 )
 scale = Vector2( 0.4, 0.4 )
 collision_layer = 2
+monitorable = false
 
 [node name="Sprite" type="Sprite" parent="VisibilityToggle"]
 scale = Vector2( 0.507812, 0.507812 )
@@ -44,6 +46,26 @@ texture = ExtResource( 3 )
 position = Vector2( -1.19209e-06, 0 )
 shape = SubResource( 1 )
 
+[node name="DebugLabel" type="Label" parent="."]
+margin_left = 8.0
+margin_top = -74.0
+margin_right = 83.0
+margin_bottom = -60.0
+input_pass_on_modal_close_click = false
+text = "DebugLabel"
+
+[node name="ColorRect" type="ColorRect" parent="DebugLabel"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -5.0
+margin_top = -4.0
+margin_right = 6.0
+margin_bottom = 4.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 0.67451 )
+
 [connection signal="input_event" from="TokenBody" to="." method="OnTokenBodyInputEvent"]
 [connection signal="input_event" from="Handle" to="." method="OnHandleInputEvent"]
 [connection signal="input_event" from="VisibilityToggle" to="." method="OnVisibilityToggleInputEvent"]
+[connection signal="gui_input" from="DebugLabel" to="." method="OnDebugLabelGuiInput"]

@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-class TokenVisibility
+class TokenVisibility : NodeComponent<Token>
 {
     const string HIDDEN_ICON = "res://assets/icons/flip_tails.png";
     const string VISIBLE_ICON = "res://assets/icons/flip_head.png";
     const string INHERIT_ICON = "res://assets/icons/flip_empty.png";
 
-    private Token _instance;
-
-    public TokenVisibility(Token instance)
-    {
-        _instance = instance;
-    }
+    public TokenVisibility(Token instance) : base(instance) { }
 
     [Export]
     private List<Visibility> _visibilities = new List<Visibility>();
@@ -90,7 +85,7 @@ class TokenVisibility
         if (shouldUpdate)
         {
             // We update the actual visibility (the Godot boolean) of this token and its children
-            _instance.UpdateVisibility(forPlayer);
+            UpdateVisibility(forPlayer);
         }
     }
 
@@ -110,6 +105,30 @@ class TokenVisibility
             case EVisibility.Inherit:
                 SetState(EVisibility.Visible, forPlayer);
                 break;
+        }
+    }
+
+    public void UpdateVisibility(int forPlayer, bool recursive = true)
+    {
+        var localState = GetLocalState(forPlayer);
+        var globalState = GetState(forPlayer);
+
+
+        bool isVisible = globalState == EVisibility.Visible;
+        var newModulate = _instance.SelfModulate;
+        newModulate.a = isVisible ? 1f : 0.1f;
+        _instance.SelfModulate = newModulate;
+
+        _instance.DebugLabel.UpdateDebugLabel();
+
+        GD.Print("♟ Token " + _instance.Name + " visibility updated: local is " + localState.ToString() + " and global is " + globalState.ToString() + "");
+
+        if (recursive)
+        {
+            foreach (Token child in _instance.Children)
+            {
+                child.Visibility.UpdateVisibility(forPlayer, recursive);
+            }
         }
     }
 }

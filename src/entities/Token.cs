@@ -11,34 +11,26 @@ class Token : Sprite
     public string Id { get; private set; }
 
     public TokenVisibility Visibility { get; private set; }
+    public TokenDebugLabel DebugLabel { get; private set; }
 
-    public Token Parent
-    {
-        get
-        {
-            if (!IsRoot)
-                return (Token)GetParent();
-            else
-                return this;
-        }
-    }
-
-    public List<Token> Children
-    {
-        get => GetChildren().OfType<Token>().ToList();
-    }
+    public Token Parent { get => IsRoot ? this : (Token)GetParent(); }
+    public List<Token> Children { get => GetChildren().OfType<Token>().ToList(); }
+    public List<Token> Siblings { get => Parent.Children; }
+    public List<Token> Ancestors { get => Parent.Ancestors; }
+    public List<Token> Descendants { get => Children.Concat(Children.SelectMany(c => c.Descendants)).ToList(); }
 
     public Area2D TokenBody { get => GetNode<Area2D>("TokenBody"); }
     public CollisionShape2D CollisionShape2D { get => GetNode<CollisionShape2D>("TokenBody/CollisionShape2D"); }
     public Node2D Handle { get => GetNode<Node2D>("Handle"); }
     public Node2D VisibilityToggle { get => GetNode<Node2D>("VisibilityToggle"); }
 
-    private bool isHandleFocused;
+    private bool isMoveHandleHeld;
 
     public Token()
     {
         Id = Guid.NewGuid().ToString();
         Visibility = new TokenVisibility(this);
+        DebugLabel = new TokenDebugLabel(this);
     }
 
     public override void _Ready()
@@ -68,14 +60,22 @@ class Token : Sprite
             CollisionShape2D.Shape = shape;
         }
 
+        DebugLabel.Ready();
+        Visibility.Ready();
+
         GD.Print($"♟ Token {Name} created: {Id}");
     }
 
     public override void _Process(float delta)
     {
-        if (isHandleFocused)
+        if (isMoveHandleHeld)
         {
-            Move(GetGlobalMousePosition() - Handle.Position - Parent.Position);
+            this.ZIndex = 1;
+            GlobalPosition = GetGlobalMousePosition() - Handle.Position;
+        }
+        else
+        {
+            this.ZIndex = 0;
         }
     }
 
@@ -89,51 +89,41 @@ class Token : Sprite
         }
     }
 
-    public void UpdateVisibility(int forPlayer, bool recursive = true)
-    {
-        var localState = Visibility.GetLocalState(forPlayer);
-        var globalState = Visibility.GetState(forPlayer);
-
-
-        bool isVisible = globalState == EVisibility.Visible;
-        var newModulate = this.SelfModulate;
-        newModulate.a = isVisible ? 1f : 0.1f;
-        this.SelfModulate = newModulate;
-
-        GD.Print("♟ Token " + Name + " visibility updated: local is " + localState.ToString() + " and global is " + globalState.ToString() + "");
-
-        if (recursive)
-        {
-            foreach (Token child in Children)
-            {
-                child.UpdateVisibility(forPlayer, recursive);
-            }
-        }
-    }
-
     public void OnHandleInputEvent(Node viewport, InputEvent evt, int shape_idx)
     {
         if (evt is InputEventMouseButton)
         {
+            // We get the event
             var mouse_button = (InputEventMouseButton)evt;
+
+            // If the player is lef-clicking
             if (mouse_button.ButtonIndex == (int)ButtonList.Left)
             {
-                isHandleFocused = mouse_button.IsPressed();
+                // We store the state of the click (the event is triggered when the mouse is pressed and released)
+                isMoveHandleHeld = mouse_button.IsPressed();
 
+                // If we're not holding the mouse button, we're not dragging anymore
                 if (!mouse_button.IsPressed())
                 {
+                    // We check all the things this Token is overlapping with
                     var overlappingAreas = TokenBody.GetOverlappingAreas();
 
+                    // We only care about the ones that are Token
                     var otherTokens = overlappingAreas.OfType<Area2D>().Where(a =>
                     {
+                        // We get the parent Node of the "thing"
                         var parent = a.GetParent();
-                        return parent != null && parent is Token && parent != Parent && parent != this & !Children.Contains(parent);
-                    }).Select(a => (Token)a.GetParent()).ToList();
+                        // And we keep the "things" that have a Token parent which is not this Token, this Token's parent, or this Token children
+                        // We can only link to another Token if it's not in the same tree
+                        return parent != null && parent is Token && parent != Parent && parent != this & !Descendants.Contains(parent);
+                    })
+                    .Select(a => (Token)a.GetParent()) // We get the "thing"'s parent, which should now be a Token
+                    .ToList();
 
                     // If we released the token, not over its parent, but over *something else*
                     if (otherTokens.Count > 0)
                     {
-                        var newParent = otherTokens.Last();
+                        var newParent = otherTokens.First();
                         if (newParent != null)
                         {
                             changeParent(newParent);
@@ -171,6 +161,6 @@ class Token : Sprite
         GlobalPosition = oldPosition;
 
         // TODO: Make this compatible with multiple players
-        UpdateVisibility(1);
+        Visibility.UpdateVisibility(1);
     }
 }
