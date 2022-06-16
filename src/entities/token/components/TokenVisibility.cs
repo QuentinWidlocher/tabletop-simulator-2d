@@ -72,15 +72,15 @@ namespace Token
             {
                 case EVisibility.Visible:
                     _instance.SelfModulate = new Color(1, 1, 1, 1);
-                    _instance.VisibilityToggle.GetNode<Sprite>("Sprite").Texture = ResourceLoader.Load<StreamTexture>(VISIBLE_ICON);
+                    _instance.VisibilityToggle.Texture = ResourceLoader.Load<StreamTexture>(VISIBLE_ICON);
                     break;
                 case EVisibility.Hidden:
                     _instance.SelfModulate = new Color(1, 1, 1, 0.1f);
-                    _instance.VisibilityToggle.GetNode<Sprite>("Sprite").Texture = ResourceLoader.Load<StreamTexture>(HIDDEN_ICON);
+                    _instance.VisibilityToggle.Texture = ResourceLoader.Load<StreamTexture>(HIDDEN_ICON);
                     break;
                 case EVisibility.Inherit:
                     _instance.SelfModulate = new Color(1, 1, 1, 1);
-                    _instance.VisibilityToggle.GetNode<Sprite>("Sprite").Texture = ResourceLoader.Load<StreamTexture>(INHERIT_ICON);
+                    _instance.VisibilityToggle.Texture = ResourceLoader.Load<StreamTexture>(INHERIT_ICON);
                     break;
             }
 

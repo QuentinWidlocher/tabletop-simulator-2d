@@ -24,6 +24,10 @@ config/name="TabletopSimulator2D"
 run/main_scene="res://scenes/Sandbox.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+SelectService="*res://src/services/SelectService.cs"
+
 [editor]
 
 version_control/autoload_on_startup=true

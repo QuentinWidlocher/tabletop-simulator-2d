@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/Sandbox.cs" type="Script" id=1]
 [ext_resource path="res://icon (copie).png" type="Texture" id=2]
-[ext_resource path="res://icon.png" type="Texture" id=3]
 [ext_resource path="res://nodes/Token.tscn" type="PackedScene" id=4]
 
 [node name="Root" type="Node2D"]
@@ -12,20 +11,36 @@ script = ExtResource( 1 )
 ElementPath = NodePath("../Grid/Token1")
 
 [node name="Grid" parent="." instance=ExtResource( 4 )]
+margin_left = -4.0
+margin_top = -2.0
+margin_right = 1023.0
+margin_bottom = 603.0
+texture = null
 IsRoot = true
 
 [node name="Token1" parent="Grid" instance=ExtResource( 4 )]
-position = Vector2( 403, 178 )
+margin_left = -336.5
+margin_top = -189.5
+margin_right = -272.5
+margin_bottom = -61.5
 texture = ExtResource( 2 )
 
 [node name="Token2" parent="Grid/Token1" instance=ExtResource( 4 )]
-position = Vector2( 34, 32 )
-texture = ExtResource( 3 )
+margin_left = 12.0
+margin_top = 2.0
+margin_right = 76.0
+margin_bottom = 66.0
 
 [node name="Token3" parent="Grid" instance=ExtResource( 4 )]
-position = Vector2( 92, 254 )
+margin_left = 220.5
+margin_top = -191.5
+margin_right = 284.5
+margin_bottom = -63.5
 texture = ExtResource( 2 )
 
 [node name="Token4" parent="Grid" instance=ExtResource( 4 )]
-position = Vector2( 400, 452 )
+margin_left = 115.5
+margin_top = 98.5
+margin_right = 179.5
+margin_bottom = 226.5
 texture = ExtResource( 2 )

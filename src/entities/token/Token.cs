@@ -5,7 +5,7 @@ namespace Token
     using System.Collections.Generic;
     using System.Linq;
 
-    class Token : Sprite
+    class Token : TextureRect
     {
         [Export]
         public bool IsRoot;
@@ -30,9 +30,11 @@ namespace Token
         #region Nodes
         public Area2D TokenBody { get => GetNode<Area2D>("TokenBody"); }
         public CollisionShape2D CollisionShape2D { get => GetNode<CollisionShape2D>("TokenBody/CollisionShape2D"); }
-        public Node2D Handle { get => GetNode<Node2D>("Handle"); }
-        public Node2D VisibilityToggle { get => GetNode<Node2D>("VisibilityToggle"); }
+        public TextureRect Handle { get => GetNode<TextureRect>("Handle"); }
+        public TextureRect VisibilityToggle { get => GetNode<TextureRect>("VisibilityToggle"); }
         #endregion
+
+        private SelectService selectService { get => GetNode<SelectService>("/root/SelectService"); }
 
         public Token()
         {
@@ -54,8 +56,8 @@ namespace Token
                 shape.Extents = this.Texture.GetSize() / 2;
                 CollisionShape2D.Shape = shape;
 
-                Handle.Position = new Vector2(Handle.Position.x, Handle.Position.y + shape.Extents.y);
-                VisibilityToggle.Position = new Vector2(VisibilityToggle.Position.x, VisibilityToggle.Position.y - shape.Extents.y);
+                RectPivotOffset = shape.Extents;
+                CollisionShape2D.Position += shape.Extents;
             }
 
             if (IsRoot)
@@ -66,6 +68,8 @@ namespace Token
                 var shape = new RectangleShape2D();
                 shape.Extents = GetViewportRect().Size;
                 CollisionShape2D.Shape = shape;
+
+                RectSize = GetViewportRect().Size;
             }
 
             DebugLabel.Ready();
@@ -78,26 +82,21 @@ namespace Token
         {
             if (isMoveHandleHeld)
             {
-                this.ZIndex = 1;
-                GlobalPosition = GetGlobalMousePosition() - Handle.Position;
-            }
-            else
-            {
-                this.ZIndex = 0;
+                RectGlobalPosition = GetGlobalMousePosition() - Handle.RectPosition - Handle.RectPivotOffset;
             }
         }
 
         public void Move(float x, float y) => Move(new Vector2(x, y), null);
         public void Move(Vector2 pos, Token? newParent = null)
         {
-            Position = pos;
+            RectPosition = pos;
             if (newParent != null)
             {
                 changeParent(newParent);
             }
         }
 
-        public void OnHandleInputEvent(Node viewport, InputEvent evt, int shape_idx)
+        public void OnHandleGuiInput(InputEvent evt)
         {
             if (evt is InputEventMouseButton)
             {
@@ -121,9 +120,9 @@ namespace Token
                         {
                             // We get the parent Node of the "thing"
                             var parent = a.GetParent();
-                            // And we keep the "things" that have a Token parent which is not this Token, this Token's parent, or this Token children
+                            // And we keep the "things" that have a Token parent which is not this Token or this Token children
                             // We can only link to another Token if it's not in the same tree
-                            return parent != null && parent is Token && parent != Parent && parent != this & !Descendants.Contains(parent);
+                            return parent != null && parent is Token && parent != this & !Descendants.Contains(parent);
                         })
                         .Select(a => (Token)a.GetParent()) // We get the "thing"'s parent, which should now be a Token
                         .ToList();
@@ -131,7 +130,7 @@ namespace Token
                         // If we released the token, not over its parent, but over *something else*
                         if (otherTokens.Count > 0)
                         {
-                            var newParent = otherTokens.First();
+                            var newParent = otherTokens.Last();
                             if (newParent != null)
                             {
                                 changeParent(newParent);
@@ -142,9 +141,23 @@ namespace Token
             }
         }
 
-        public void OnTokenBodyInputEvent(Node viewport, InputEvent evt, int shape_idx) { }
+        public void OnTokenGuiInput(InputEvent evt)
+        {
+            if (evt is InputEventMouseButton)
+            {
+                var mouse_button = (InputEventMouseButton)evt;
+                if (mouse_button.ButtonIndex == (int)ButtonList.Left)
+                {
+                    if (mouse_button.IsPressed())
+                    {
+                        selectService.ToggleFocus(this);
+                        GD.Print($"♟ Token {Name} took the event");
+                    }
+                }
+            }
+        }
 
-        public void OnVisibilityToggleInputEvent(Node viewport, InputEvent evt, int shape_idx)
+        public void OnVisibilityToggleGuiInput(InputEvent evt)
         {
             if (evt is InputEventMouseButton)
             {
@@ -163,10 +176,10 @@ namespace Token
         private void changeParent(Token newParent)
         {
             GD.Print("♟ Token " + Name + " moved from " + Parent.Name + " to " + newParent.Name);
-            var oldPosition = GlobalPosition;
+            var oldPosition = RectGlobalPosition;
             Parent.RemoveChild(this);
             newParent.AddChild(this);
-            GlobalPosition = oldPosition;
+            RectGlobalPosition = oldPosition;
 
             // TODO: Make this compatible with multiple players
             Visibility.UpdateVisibility(1);
