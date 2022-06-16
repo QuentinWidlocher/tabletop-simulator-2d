@@ -73,7 +73,6 @@ class Token : Sprite
 
     public override void _Process(float delta)
     {
-        // TODO: Make this compatible with multiple players
         if (isHandleFocused)
         {
             Move(GetGlobalMousePosition() - Handle.Position - Parent.Position);
@@ -90,18 +89,24 @@ class Token : Sprite
         }
     }
 
-    public void UpdateVisibility(int forPlayer, EVisibility state, bool recursive = true)
+    public void UpdateVisibility(int forPlayer, bool recursive = true)
     {
-        bool isVisible = state == EVisibility.Visible;
+        var localState = Visibility.GetLocalState(forPlayer);
+        var globalState = Visibility.GetState(forPlayer);
+
+
+        bool isVisible = globalState == EVisibility.Visible;
         var newModulate = this.SelfModulate;
         newModulate.a = isVisible ? 1f : 0.1f;
         this.SelfModulate = newModulate;
+
+        GD.Print("♟ Token " + Name + " visibility updated: local is " + localState.ToString() + " and global is " + globalState.ToString() + "");
 
         if (recursive)
         {
             foreach (Token child in Children)
             {
-                child.UpdateVisibility(forPlayer, state, recursive);
+                child.UpdateVisibility(forPlayer, recursive);
             }
         }
     }
@@ -150,6 +155,7 @@ class Token : Sprite
             {
                 if (mouse_button.IsPressed())
                 {
+                    // TODO: Make this compatible with multiple players
                     Visibility.Toggle(1);
                 }
             }
@@ -163,5 +169,8 @@ class Token : Sprite
         Parent.RemoveChild(this);
         newParent.AddChild(this);
         GlobalPosition = oldPosition;
+
+        // TODO: Make this compatible with multiple players
+        UpdateVisibility(1);
     }
 }

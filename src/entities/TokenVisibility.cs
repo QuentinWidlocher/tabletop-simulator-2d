@@ -5,6 +5,10 @@ using System;
 
 class TokenVisibility
 {
+    const string HIDDEN_ICON = "res://assets/icons/flip_tails.png";
+    const string VISIBLE_ICON = "res://assets/icons/flip_head.png";
+    const string INHERIT_ICON = "res://assets/icons/flip_empty.png";
+
     private Token _instance;
 
     public TokenVisibility(Token instance)
@@ -15,12 +19,9 @@ class TokenVisibility
     [Export]
     private List<Visibility> _visibilities = new List<Visibility>();
 
-    public EVisibility GetState(int forPlayer)
+    // Return the visibility of the token as stored in the visibilities list
+    public EVisibility? GetLocalState(int forPlayer)
     {
-        // The root is always visible.
-        if (_instance.IsRoot)
-            return EVisibility.Visible;
-
         // We search for the visibility of this token, for this player
         EVisibility? visibilityForPlayer = null;
         try
@@ -31,6 +32,18 @@ class TokenVisibility
         {
             visibilityForPlayer = null;
         }
+
+        return visibilityForPlayer;
+    }
+
+    // Return the visibility of the token, taking into account the visibilities of its parents
+    public EVisibility GetState(int forPlayer)
+    {
+        // The root is always visible.
+        if (_instance.IsRoot)
+            return EVisibility.Visible;
+
+        var visibilityForPlayer = GetLocalState(forPlayer);
 
         // If we don't have any visibility for this player...
         if (visibilityForPlayer == null || visibilityForPlayer == EVisibility.Inherit)
@@ -58,25 +71,44 @@ class TokenVisibility
         _visibilities.RemoveAll(v => v.Player == forPlayer);
         _visibilities.Add(new Visibility { Player = forPlayer, State = state });
 
+        switch (state)
+        {
+            case EVisibility.Visible:
+                _instance.SelfModulate = new Color(1, 1, 1, 1);
+                _instance.VisibilityToggle.GetNode<Sprite>("Sprite").Texture = ResourceLoader.Load<StreamTexture>(VISIBLE_ICON);
+                break;
+            case EVisibility.Hidden:
+                _instance.SelfModulate = new Color(1, 1, 1, 0.1f);
+                _instance.VisibilityToggle.GetNode<Sprite>("Sprite").Texture = ResourceLoader.Load<StreamTexture>(HIDDEN_ICON);
+                break;
+            case EVisibility.Inherit:
+                _instance.SelfModulate = new Color(1, 1, 1, 1);
+                _instance.VisibilityToggle.GetNode<Sprite>("Sprite").Texture = ResourceLoader.Load<StreamTexture>(INHERIT_ICON);
+                break;
+        }
+
         if (shouldUpdate)
         {
             // We update the actual visibility (the Godot boolean) of this token and its children
-            _instance.UpdateVisibility(forPlayer, state);
+            _instance.UpdateVisibility(forPlayer);
         }
     }
 
     public void Toggle(int forPlayer)
     {
-        switch (GetState(forPlayer))
+        switch (GetLocalState(forPlayer))
         {
             case EVisibility.Visible:
                 SetState(EVisibility.Hidden, forPlayer);
                 break;
+
             case EVisibility.Hidden:
-                SetState(EVisibility.Visible, forPlayer);
+                SetState(EVisibility.Inherit, forPlayer);
                 break;
+
+            default:
             case EVisibility.Inherit:
-                SetState(EVisibility.Hidden, forPlayer);
+                SetState(EVisibility.Visible, forPlayer);
                 break;
         }
     }

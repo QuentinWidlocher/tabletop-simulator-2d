@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/entities/Token.cs" type="Script" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://assets/icons/arrow_cross.png" type="Texture" id=2]
+[ext_resource path="res://assets/icons/flip_empty.png" type="Texture" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 32, 32 )
@@ -15,11 +16,12 @@ script = ExtResource( 1 )
 scale = Vector2( 1, 1.02475 )
 
 [node name="Handle" type="Area2D" parent="."]
+position = Vector2( 0, 28 )
 scale = Vector2( 0.4, 0.4 )
 collision_layer = 2
 
 [node name="Sprite" type="Sprite" parent="Handle"]
-modulate = Color( 0, 1, 0.2, 1 )
+scale = Vector2( 0.507812, 0.507812 )
 z_index = 1
 texture = ExtResource( 2 )
 
@@ -29,13 +31,14 @@ shape = SubResource( 1 )
 
 [node name="VisibilityToggle" type="Area2D" parent="."]
 show_behind_parent = true
+position = Vector2( 0, -30 )
 scale = Vector2( 0.4, 0.4 )
 collision_layer = 2
 
 [node name="Sprite" type="Sprite" parent="VisibilityToggle"]
-modulate = Color( 1, 0, 0, 1 )
+scale = Vector2( 0.507812, 0.507812 )
 z_index = 1
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="VisibilityToggle"]
 position = Vector2( -1.19209e-06, 0 )
