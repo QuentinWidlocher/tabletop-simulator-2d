@@ -1,4 +1,4 @@
-using System.Linq;
+using Token;
 using Godot;
 using Extensions;
 
@@ -7,7 +7,7 @@ class Sandbox : Node
     [Export]
     public NodePath? ElementPath;
 
-    private Token? element;
+    private Token.Token? element;
 
     private int i;
 
@@ -15,7 +15,7 @@ class Sandbox : Node
     {
         this.AssertNotNull(ElementPath, "ElementPath");
 
-        element = GetNode(ElementPath) as Token;
+        element = GetNode(ElementPath) as Token.Token;
 
         this.AssertNotNull(element, "Element");
     }

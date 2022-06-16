@@ -10,4 +10,6 @@ abstract class NodeComponent<T> where T : Node
     }
 
     public virtual void Ready() { }
+
+    public virtual void Process() { }
 }
