@@ -24,7 +24,16 @@ namespace Token
         public Token Parent { get => IsRoot ? this : (Token)GetParent(); }
         public List<Token> Children { get => GetChildren().OfType<Token>().ToList(); }
         public List<Token> Siblings { get => Parent.Children; }
-        public List<Token> Ancestors { get => Parent.Ancestors; }
+        public List<Token> Ancestors { get {
+            var ancestors = new List<Token>();
+            var parent = Parent;
+            while (parent != null && !parent.IsRoot)
+            {
+                ancestors.Add(parent);
+                parent = parent.Parent;
+            }
+            return ancestors;
+        } }
         public List<Token> Descendants { get => Children.Concat(Children.SelectMany(c => c.Descendants)).ToList(); }
         #endregion
 
@@ -197,9 +206,11 @@ namespace Token
         {
             GD.Print("♟ Token " + Name + " moved from " + Parent.Name + " to " + newParent.Name);
             var oldPosition = RectGlobalPosition;
+            var oldRotation = Ancestors.Sum(a => a.RectRotation) % 360;
             Parent.RemoveChild(this);
             newParent.AddChild(this);
             RectGlobalPosition = oldPosition;
+            RectRotation = oldRotation;
 
             // TODO: Make this compatible with multiple players
             Visibility.UpdateVisibility(1);
