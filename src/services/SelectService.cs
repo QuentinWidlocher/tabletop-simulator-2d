@@ -15,7 +15,8 @@ class SelectService : Node
         {
             selectedToken.SelfModulate = new Color(1, 1, 1, selectedToken.SelfModulate.a);
             selectedToken.VisibilityToggle.Visible = false;
-            selectedToken.Handle.Visible = false;
+            selectedToken.MoveHandle.Visible = false;
+            selectedToken.RotateHandle.Visible = false;
             selectedToken.DebugLabel.DebugLabel.Visible = false;
         }
 
@@ -25,7 +26,8 @@ class SelectService : Node
 
             token.SelfModulate = new Color(0.5f, 0.5f, 1, token.SelfModulate.a);
             token.VisibilityToggle.Visible = true;
-            token.Handle.Visible = true;
+            token.MoveHandle.Visible = true;
+            token.RotateHandle.Visible = true;
             token.DebugLabel.DebugLabel.Visible = true;
         }
         else

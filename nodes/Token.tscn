@@ -1,21 +1,17 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/entities/token/Token.cs" type="Script" id=1]
 [ext_resource path="res://icon.png" type="Texture" id=2]
 [ext_resource path="res://assets/icons/flip_empty.png" type="Texture" id=3]
 [ext_resource path="res://assets/icons/arrow_cross.png" type="Texture" id=4]
+[ext_resource path="res://assets/icons/arrow_counterclockwise.png" type="Texture" id=5]
 
 [node name="Token" type="TextureRect"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -32.0
-margin_top = -32.0
-margin_right = 32.0
-margin_bottom = 32.0
+margin_right = 64.0
+margin_bottom = 64.0
 grow_horizontal = 0
 grow_vertical = 0
+rect_pivot_offset = Vector2( 32, 32 )
 mouse_filter = 0
 texture = ExtResource( 2 )
 script = ExtResource( 1 )
@@ -25,7 +21,7 @@ input_pickable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TokenBody"]
 
-[node name="Handle" type="TextureRect" parent="."]
+[node name="MoveHandle" type="TextureRect" parent="."]
 visible = false
 anchor_left = 0.5
 anchor_top = 1.0
@@ -39,6 +35,21 @@ rect_scale = Vector2( 0.2, 0.2 )
 rect_pivot_offset = Vector2( 64, 64 )
 mouse_filter = 0
 texture = ExtResource( 4 )
+
+[node name="RotateHandle" type="TextureRect" parent="."]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -64.0
+margin_top = -49.0
+margin_right = 64.0
+margin_bottom = 79.0
+rect_scale = Vector2( 0.2, 0.2 )
+rect_pivot_offset = Vector2( 64, 64 )
+mouse_filter = 0
+texture = ExtResource( 5 )
 
 [node name="VisibilityToggle" type="TextureRect" parent="."]
 visible = false
@@ -76,5 +87,6 @@ mouse_filter = 2
 color = Color( 0, 0, 0, 0.67451 )
 
 [connection signal="gui_input" from="." to="." method="OnTokenGuiInput"]
-[connection signal="gui_input" from="Handle" to="." method="OnHandleGuiInput"]
+[connection signal="gui_input" from="MoveHandle" to="." method="OnMoveHandleGuiInput"]
+[connection signal="gui_input" from="RotateHandle" to="." method="OnRotateHandleGuiInput"]
 [connection signal="gui_input" from="VisibilityToggle" to="." method="OnVisibilityToggleGuiInput"]

@@ -13,6 +13,7 @@ namespace Token
         public string Id { get; private set; }
 
         private bool isMoveHandleHeld;
+        private bool isRotateHandleHeld;
 
         #region Components
         public TokenVisibility Visibility { get; private set; }
@@ -30,7 +31,8 @@ namespace Token
         #region Nodes
         public Area2D TokenBody { get => GetNode<Area2D>("TokenBody"); }
         public CollisionShape2D CollisionShape2D { get => GetNode<CollisionShape2D>("TokenBody/CollisionShape2D"); }
-        public TextureRect Handle { get => GetNode<TextureRect>("Handle"); }
+        public TextureRect MoveHandle { get => GetNode<TextureRect>("MoveHandle"); }
+        public TextureRect RotateHandle { get => GetNode<TextureRect>("RotateHandle"); }
         public TextureRect VisibilityToggle { get => GetNode<TextureRect>("VisibilityToggle"); }
         #endregion
 
@@ -62,14 +64,12 @@ namespace Token
 
             if (IsRoot)
             {
-                Handle.Visible = false;
+                MoveHandle.Visible = false;
                 VisibilityToggle.Visible = false;
 
                 var shape = new RectangleShape2D();
                 shape.Extents = GetViewportRect().Size;
                 CollisionShape2D.Shape = shape;
-
-                RectSize = GetViewportRect().Size;
             }
 
             DebugLabel.Ready();
@@ -82,7 +82,14 @@ namespace Token
         {
             if (isMoveHandleHeld)
             {
-                RectGlobalPosition = GetGlobalMousePosition() - Handle.RectPosition - Handle.RectPivotOffset;
+                RectGlobalPosition = GetGlobalMousePosition() - MoveHandle.RectPosition - MoveHandle.RectPivotOffset;
+            }
+
+            if (isRotateHandleHeld)
+            {
+                var hangleAngle = Mathf.Rad2Deg((RectPosition + RectPivotOffset).AngleToPoint(RotateHandle.RectPosition + RotateHandle.RectPivotOffset * 2));
+                RectRotation = Mathf.Rad2Deg((RectPosition + RectPivotOffset).AngleToPoint(GetGlobalMousePosition())) + 90 + hangleAngle;
+                DebugLabel.UpdateDebugLabel();
             }
         }
 
@@ -96,7 +103,7 @@ namespace Token
             }
         }
 
-        public void OnHandleGuiInput(InputEvent evt)
+        public void OnMoveHandleGuiInput(InputEvent evt)
         {
             if (evt is InputEventMouseButton)
             {
@@ -137,6 +144,19 @@ namespace Token
                             }
                         }
                     }
+                }
+            }
+        }
+
+        public void OnRotateHandleGuiInput(InputEvent evt)
+        {
+            if (evt is InputEventMouseButton)
+            {
+                var mouse_button = (InputEventMouseButton)evt;
+
+                if (mouse_button.ButtonIndex == (int)ButtonList.Left)
+                {
+                    isRotateHandleHeld = mouse_button.IsPressed();
                 }
             }
         }

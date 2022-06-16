@@ -11,18 +11,21 @@ script = ExtResource( 1 )
 ElementPath = NodePath("../Grid/Token1")
 
 [node name="Grid" parent="." instance=ExtResource( 4 )]
-margin_left = -4.0
-margin_top = -2.0
-margin_right = 1023.0
-margin_bottom = 603.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_right = 1024.0
+margin_bottom = 600.0
+rect_pivot_offset = Vector2( 0, 0 )
 texture = null
 IsRoot = true
 
 [node name="Token1" parent="Grid" instance=ExtResource( 4 )]
-margin_left = -336.5
-margin_top = -189.5
-margin_right = -272.5
-margin_bottom = -61.5
+margin_left = 127.0
+margin_top = 110.0
+margin_right = 191.0
+margin_bottom = 238.0
 texture = ExtResource( 2 )
 
 [node name="Token2" parent="Grid/Token1" instance=ExtResource( 4 )]
@@ -32,15 +35,15 @@ margin_right = 76.0
 margin_bottom = 66.0
 
 [node name="Token3" parent="Grid" instance=ExtResource( 4 )]
-margin_left = 220.5
-margin_top = -191.5
-margin_right = 284.5
-margin_bottom = -63.5
+margin_left = 684.0
+margin_top = 108.0
+margin_right = 748.0
+margin_bottom = 236.0
 texture = ExtResource( 2 )
 
 [node name="Token4" parent="Grid" instance=ExtResource( 4 )]
-margin_left = 115.5
-margin_top = 98.5
-margin_right = 179.5
-margin_bottom = 226.5
+margin_left = 579.0
+margin_top = 398.0
+margin_right = 643.0
+margin_bottom = 526.0
 texture = ExtResource( 2 )
