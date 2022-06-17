@@ -11,5 +11,7 @@ abstract class NodeComponent<T> where T : Node
 
     public virtual void Ready() { }
 
-    public virtual void Process() { }
+    public virtual void Process(float delta) { }
+
+    public virtual void Draw() { }
 }
