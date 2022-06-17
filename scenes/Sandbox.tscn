@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/Sandbox.cs" type="Script" id=1]
-[ext_resource path="res://icon (copie).png" type="Texture" id=2]
+[ext_resource path="res://icon_vertical.png" type="Texture" id=2]
+[ext_resource path="res://icon_horizontal.png" type="Texture" id=3]
 [ext_resource path="res://nodes/Token.tscn" type="PackedScene" id=4]
 
 [node name="Root" type="Node2D"]
@@ -15,41 +16,48 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -480.0
-margin_top = -231.0
-margin_right = 544.0
-margin_bottom = 369.0
+margin_right = 1024.0
+margin_bottom = 600.0
 rect_pivot_offset = Vector2( 0, 0 )
-texture = null
 IsRoot = true
 
+[node name="ColorRect" parent="Grid" index="5"]
+visible = false
+
 [node name="Token1" parent="Grid" instance=ExtResource( 4 )]
-margin_left = 127.0
-margin_top = 110.0
-margin_right = 191.0
-margin_bottom = 238.0
+margin_left = 120.0
+margin_top = 167.0
+margin_right = 184.0
+margin_bottom = 231.0
+
+[node name="Sprite" parent="Grid/Token1" index="4"]
 texture = ExtResource( 2 )
 
 [node name="Token2" parent="Grid/Token1" instance=ExtResource( 4 )]
-margin_left = 12.0
-margin_top = 2.0
-margin_right = 76.0
-margin_bottom = 66.0
+margin_left = 120.0
+margin_top = -5.0
+margin_right = 184.0
+margin_bottom = 59.0
 
 [node name="Token3" parent="Grid" instance=ExtResource( 4 )]
-margin_left = 684.0
-margin_top = 108.0
-margin_right = 748.0
-margin_bottom = 236.0
-texture = ExtResource( 2 )
+margin_left = 471.0
+margin_top = 186.0
+margin_right = 535.0
+margin_bottom = 314.0
+
+[node name="Sprite" parent="Grid/Token3" index="4"]
+texture = ExtResource( 3 )
 
 [node name="Token4" parent="Grid" instance=ExtResource( 4 )]
 margin_left = 219.0
 margin_top = 373.0
 margin_right = 283.0
 margin_bottom = 501.0
-texture = ExtResource( 2 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 32, 68 )
+position = Vector2( 312, 234 )
 current = true
+
+[editable path="Grid"]
+[editable path="Grid/Token1"]
+[editable path="Grid/Token3"]

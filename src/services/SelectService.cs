@@ -13,7 +13,7 @@ class SelectService : Node
     {
         if (selectedToken != null)
         {
-            selectedToken.SelfModulate = new Color(1, 1, 1, selectedToken.SelfModulate.a);
+            selectedToken.Sprite.SelfModulate = new Color(1, 1, 1, selectedToken.Sprite.SelfModulate.a);
             selectedToken.VisibilityToggle.Visible = false;
             selectedToken.TokenMovement.MoveHandle.Visible = false;
             selectedToken.TokenMovement.RotateHandle.Visible = false;
@@ -24,7 +24,7 @@ class SelectService : Node
         {
             selectedToken = token;
 
-            token.SelfModulate = new Color(0.5f, 0.5f, 1, token.SelfModulate.a);
+            token.Sprite.SelfModulate = new Color(0.5f, 0.5f, 1, token.Sprite.SelfModulate.a);
             token.VisibilityToggle.Visible = true;
             token.TokenMovement.MoveHandle.Visible = true;
             token.TokenMovement.RotateHandle.Visible = true;

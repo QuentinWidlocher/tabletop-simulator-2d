@@ -20,7 +20,7 @@ namespace Token
             debugText += "Name : " + _instance.Name + "\n";
             debugText += "LocalVisibility : " + _instance.Visibility.GetLocalState(1) + "\n";
             debugText += "GlobalVisibility : " + _instance.Visibility.GetState(1) + "\n";
-            debugText += "Rotation: " + _instance.RectRotation + "\n";
+            debugText += "Rotation: " + _instance.Sprite.RectRotation + "\n";
             if (_instance.Parent != null)
             {
                 debugText += "Parent {\n";

@@ -117,9 +117,9 @@ namespace Token
 
 
             bool isVisible = globalState == EVisibility.Visible;
-            var newModulate = _instance.SelfModulate;
+            var newModulate = _instance.Sprite.SelfModulate;
             newModulate.a = isVisible ? 1f : 0.1f;
-            _instance.SelfModulate = newModulate;
+            _instance.Sprite.SelfModulate = newModulate;
 
             _instance.DebugLabel.UpdateDebugLabel();
 

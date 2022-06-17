@@ -6,7 +6,7 @@ namespace Token
     using System.Linq;
     using Extensions;
 
-    class Token : TextureRect
+    class Token : Control
     {
         [Export]
         public bool IsRoot;
@@ -44,6 +44,7 @@ namespace Token
         public Area2D TokenBody { get => GetNode<Area2D>("TokenBody"); }
         public CollisionShape2D CollisionShape2D { get => GetNode<CollisionShape2D>("TokenBody/CollisionShape2D"); }
         public TextureRect VisibilityToggle { get => GetNode<TextureRect>("VisibilityToggle"); }
+        public TextureRect Sprite { get => GetNode<TextureRect>("Sprite"); }
         #endregion
 
         private SelectService selectService { get => GetNode<SelectService>("/root/SelectService"); }
@@ -63,13 +64,16 @@ namespace Token
                 throw new InitializationException($"Token {Name} must be a child of a Token");
             }
 
-            if (Texture != null)
+            if (Sprite.Texture != null)
             {
                 var shape = new RectangleShape2D();
-                shape.Extents = this.Texture.GetSize() / 2;
+                shape.Extents = Sprite.Texture.GetSize() / 2;
                 CollisionShape2D.Shape = shape;
 
                 RectPivotOffset = shape.Extents;
+                Sprite.RectPivotOffset = shape.Extents;
+                RectSize = Sprite.Texture.GetSize();
+
                 CollisionShape2D.Position += shape.Extents;
             }
 
@@ -81,6 +85,8 @@ namespace Token
                 var shape = new RectangleShape2D();
                 shape.Extents = GetViewportRect().Size;
                 CollisionShape2D.Shape = shape;
+
+                RectSize = GetViewportRect().Size;
             }
 
             DebugLabel.Ready();
