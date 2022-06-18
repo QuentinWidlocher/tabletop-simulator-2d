@@ -16,7 +16,7 @@ namespace Token
         #region Components
         public TokenVisibility Visibility { get; private set; }
         public TokenDebugLabel DebugLabel { get; private set; }
-        public TokenMovement TokenMovement { get; private set; }
+        public TokenTransform TokenTransform { get; private set; }
         #endregion
 
         #region Family Tree
@@ -54,7 +54,7 @@ namespace Token
             Id = Guid.NewGuid().ToString();
             Visibility = new TokenVisibility(this);
             DebugLabel = new TokenDebugLabel(this);
-            TokenMovement = new TokenMovement(this);
+            TokenTransform = new TokenTransform(this);
         }
 
         public override void _Ready()
@@ -79,7 +79,7 @@ namespace Token
 
             if (IsRoot)
             {
-                TokenMovement.MoveHandle.Visible = false;
+                TokenTransform.MoveHandle.Visible = false;
                 VisibilityToggle.Visible = false;
 
                 var shape = new RectangleShape2D();
@@ -91,21 +91,21 @@ namespace Token
 
             DebugLabel.Ready();
             Visibility.Ready();
-            TokenMovement.Ready();
+            TokenTransform.Ready();
 
             GD.Print($"♟ Token {Name} created: {Id}");
         }
 
         public override void _Process(float delta)
         {
-            TokenMovement.Process(delta);
+            TokenTransform.Process(delta);
 
             Update();
         }
 
         public override void _Draw()
         {
-            TokenMovement.Draw();
+            TokenTransform.Draw();
         }
 
         public void Move(float x, float y) => Move(new Vector2(x, y), null);
@@ -123,13 +123,11 @@ namespace Token
             var mouseButton = evt.GetIfLeftClick();
             if (mouseButton != null)
             {
-                TokenMovement.isMoveHandleHeld = mouseButton.IsPressed();
+                TokenTransform.isMoveHandleHeld = mouseButton.IsPressed();
 
                 if (!mouseButton.IsPressed())
                 {
-                    GD.Print($"♟ Token {Name} move handle released");
-
-                    TokenMovement.isMoveHandleHeld = false;
+                    TokenTransform.isMoveHandleHeld = false;
 
                     // We check all the things this Token is overlapping with
                     var overlappingAreas = TokenBody.GetOverlappingAreas();
@@ -164,7 +162,7 @@ namespace Token
             var mouseButton = evt.GetIfLeftClick();
             if (mouseButton != null)
             {
-                TokenMovement.isRotateHandleHeld = mouseButton.IsPressed();
+                TokenTransform.isRotateHandleHeld = mouseButton.IsPressed();
             }
         }
 
@@ -193,6 +191,16 @@ namespace Token
                         Visibility.Toggle(1);
                     }
                 }
+            }
+        }
+
+        public void OnScaleHandleGuiInput(InputEvent evt)
+        {
+            var mouseButton = evt.GetIfLeftClick();
+            if (mouseButton != null)
+            {
+                TokenTransform.isScaleHandleHeld = mouseButton.IsPressed();
+                GD.Print(TokenTransform.isScaleHandleHeld);
             }
         }
 
