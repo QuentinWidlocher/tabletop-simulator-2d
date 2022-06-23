@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/Sandbox.cs" type="Script" id=1]
 [ext_resource path="res://icon_vertical.png" type="Texture" id=2]
 [ext_resource path="res://icon_horizontal.png" type="Texture" id=3]
 [ext_resource path="res://nodes/Token.tscn" type="PackedScene" id=4]
+[ext_resource path="res://icon.png" type="Texture" id=5]
 
 [node name="Root" type="Node2D"]
 
@@ -14,48 +15,40 @@ ElementPath = NodePath("../Grid/Token1")
 [node name="Grid" parent="." instance=ExtResource( 4 )]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 0.0
-margin_bottom = 0.0
+margin_left = -511.0
+margin_top = -298.0
+margin_right = -511.0
+margin_bottom = -298.0
 rect_pivot_offset = Vector2( 0, 0 )
 IsRoot = true
-
-[node name="ColorRect" parent="Grid" index="3"]
-visible = false
 
 [node name="Token1" parent="Grid" instance=ExtResource( 4 )]
 margin_left = 120.0
 margin_top = 167.0
 margin_right = 184.0
 margin_bottom = 231.0
-
-[node name="Sprite" parent="Grid/Token1" index="2"]
-texture = ExtResource( 2 )
+Texture = ExtResource( 2 )
 
 [node name="Token2" parent="Grid/Token1" instance=ExtResource( 4 )]
-margin_left = 120.0
-margin_top = -5.0
-margin_right = 184.0
-margin_bottom = 59.0
+margin_left = 26.0
+margin_top = 17.0
+margin_right = 90.0
+margin_bottom = 81.0
+Texture = ExtResource( 5 )
 
 [node name="Token3" parent="Grid" instance=ExtResource( 4 )]
-margin_left = 471.0
-margin_top = 186.0
-margin_right = 535.0
-margin_bottom = 314.0
-
-[node name="Sprite" parent="Grid/Token3" index="2"]
-texture = ExtResource( 3 )
+margin_left = 662.0
+margin_top = 254.0
+margin_right = 726.0
+margin_bottom = 382.0
+Texture = ExtResource( 3 )
 
 [node name="Token4" parent="Grid" instance=ExtResource( 4 )]
 margin_left = 219.0
 margin_top = 373.0
 margin_right = 283.0
 margin_bottom = 501.0
+Texture = ExtResource( 5 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 312, 234 )
 current = true
-
-[editable path="Grid"]
-[editable path="Grid/Token1"]
-[editable path="Grid/Token3"]

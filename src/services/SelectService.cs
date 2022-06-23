@@ -19,6 +19,7 @@ class SelectService : Node
             // selectedToken.TokenTransform.RotateHandle.Visible = false;
             // token.TokenTransform.ScaleHandle.Visible = false;
             selectedToken.DebugLabel.DebugLabel.Visible = false;
+            selectedToken.SelectShape.Visible = false;
         }
 
         if (focus)
@@ -31,6 +32,7 @@ class SelectService : Node
             // token.TokenTransform.RotateHandle.Visible = true;
             // token.TokenTransform.ScaleHandle.Visible = true;
             token.DebugLabel.DebugLabel.Visible = true;
+            selectedToken.SelectShape.Visible = !selectedToken.IsRoot;
         }
         else
         {

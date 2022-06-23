@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/switch3.ogg-f407cd35c828d81c3fd3afee6a518a43.oggstr"
+
+[deps]
+
+source_file="res://assets/uipack_fixed/Bonus/switch3.ogg"
+dest_files=[ "res://.import/switch3.ogg-f407cd35c828d81c3fd3afee6a518a43.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

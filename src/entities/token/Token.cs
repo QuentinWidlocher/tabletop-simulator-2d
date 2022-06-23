@@ -11,6 +11,9 @@ namespace Token
         [Export]
         public bool IsRoot;
 
+        [Export]
+        public Texture? Texture;
+
         public string Id { get; private set; }
 
         #region Components
@@ -45,6 +48,7 @@ namespace Token
         public CollisionShape2D CollisionShape2D { get => GetNode<CollisionShape2D>("TokenBody/CollisionShape2D"); }
         public TextureRect VisibilityToggle { get => GetNode<TextureRect>("VisibilityToggle"); }
         public TextureRect Sprite { get => GetNode<TextureRect>("Sprite"); }
+        public NinePatchRect SelectShape { get => GetNode<NinePatchRect>("SelectShape"); }
         #endregion
 
         private SelectService selectService { get => GetNode<SelectService>("/root/SelectService"); }
@@ -62,6 +66,11 @@ namespace Token
             if ((GetParent() == null || GetParent().GetType() != typeof(Token)) && !IsRoot)
             {
                 throw new InitializationException($"Token {Name} must be a child of a Token");
+            }
+
+            if (Texture != null)
+            {
+                Sprite.Texture = Texture;
             }
 
             if (Sprite.Texture != null)

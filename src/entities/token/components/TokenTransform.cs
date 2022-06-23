@@ -56,6 +56,7 @@ namespace Token
 
         public override void Draw()
         {
+            return;
             if (_instance.Name == "Token3")
             {
                 var (redPoint, greenPoint, bluePoint, blackPoint) = getBoundingBoxPoints();

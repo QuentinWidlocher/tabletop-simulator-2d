@@ -1,11 +1,14 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://src/entities/token/Token.cs" type="Script" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
 [ext_resource path="res://assets/icons/flip_empty.png" type="Texture" id=3]
 [ext_resource path="res://assets/icons/arrow_cross.png" type="Texture" id=4]
 [ext_resource path="res://assets/icons/arrow_counterclockwise.png" type="Texture" id=5]
 [ext_resource path="res://assets/icons/arrow_diagonal.png" type="Texture" id=6]
+[ext_resource path="res://assets/uipack_fixed/PNG/blue_button13.png" type="Texture" id=7]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+blend_mode = 3
 
 [node name="Token" type="Control"]
 margin_right = 64.0
@@ -46,7 +49,6 @@ color = Color( 0, 0, 0, 0.67451 )
 margin_right = 64.0
 margin_bottom = 64.0
 rect_pivot_offset = Vector2( 32, 32 )
-texture = ExtResource( 2 )
 
 [node name="RotateHandle" type="TextureRect" parent="Sprite"]
 visible = false
@@ -64,7 +66,8 @@ mouse_filter = 0
 mouse_default_cursor_shape = 6
 texture = ExtResource( 5 )
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="DebugShape" type="ColorRect" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -115,6 +118,25 @@ rect_scale = Vector2( 0.2, 0.2 )
 rect_pivot_offset = Vector2( 64, 64 )
 mouse_filter = 0
 texture = ExtResource( 3 )
+
+[node name="SelectShape" type="NinePatchRect" parent="."]
+visible = false
+self_modulate = Color( 1, 1, 1, 0 )
+material = SubResource( 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -3.0
+margin_top = -3.0
+margin_right = 3.0
+margin_bottom = 5.0
+texture = ExtResource( 7 )
+region_rect = Rect2( -0.157074, 0, 190.447, 49.5189 )
+patch_margin_left = 5
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 10
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
 
 [connection signal="gui_input" from="." to="." method="OnTokenGuiInput"]
 [connection signal="gui_input" from="Sprite/RotateHandle" to="." method="OnRotateHandleGuiInput"]
