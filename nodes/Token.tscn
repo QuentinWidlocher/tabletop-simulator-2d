@@ -1,18 +1,32 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://src/entities/token/Token.cs" type="Script" id=1]
 [ext_resource path="res://assets/icons/flip_empty.png" type="Texture" id=3]
 [ext_resource path="res://assets/icons/arrow_cross.png" type="Texture" id=4]
 [ext_resource path="res://assets/icons/arrow_counterclockwise.png" type="Texture" id=5]
 [ext_resource path="res://assets/icons/arrow_diagonal.png" type="Texture" id=6]
-[ext_resource path="res://assets/uipack_fixed/PNG/blue_button13.png" type="Texture" id=7]
 
-[sub_resource type="CanvasItemMaterial" id=1]
-blend_mode = 3
+[sub_resource type="StyleBoxFlat" id=1]
+draw_center = false
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.054902, 0.647059, 0.913725, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="Token" type="Control"]
-margin_right = 64.0
-margin_bottom = 64.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -512.0
+margin_top = -300.0
+margin_right = -382.0
+margin_bottom = -170.0
 grow_horizontal = 0
 grow_vertical = 0
 rect_pivot_offset = Vector2( 32, 32 )
@@ -46,8 +60,6 @@ mouse_filter = 2
 color = Color( 0, 0, 0, 0.67451 )
 
 [node name="Sprite" type="TextureRect" parent="."]
-margin_right = 64.0
-margin_bottom = 64.0
 rect_pivot_offset = Vector2( 32, 32 )
 
 [node name="RotateHandle" type="TextureRect" parent="Sprite"]
@@ -110,33 +122,24 @@ visible = false
 show_behind_parent = true
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = -64.0
-margin_top = -80.0
-margin_right = 64.0
-margin_bottom = 48.0
+margin_left = -63.0
+margin_top = -83.0
+margin_right = 65.0
+margin_bottom = 45.0
 rect_scale = Vector2( 0.2, 0.2 )
 rect_pivot_offset = Vector2( 64, 64 )
 mouse_filter = 0
 texture = ExtResource( 3 )
 
-[node name="SelectShape" type="NinePatchRect" parent="."]
+[node name="SelectShape" type="Panel" parent="."]
 visible = false
-self_modulate = Color( 1, 1, 1, 0 )
-material = SubResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -3.0
-margin_top = -3.0
-margin_right = 3.0
-margin_bottom = 5.0
-texture = ExtResource( 7 )
-region_rect = Rect2( -0.157074, 0, 190.447, 49.5189 )
-patch_margin_left = 5
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 10
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
+margin_left = -6.0
+margin_top = -6.0
+margin_right = 6.0
+margin_bottom = 6.0
+custom_styles/panel = SubResource( 1 )
 
 [connection signal="gui_input" from="." to="." method="OnTokenGuiInput"]
 [connection signal="gui_input" from="Sprite/RotateHandle" to="." method="OnRotateHandleGuiInput"]
