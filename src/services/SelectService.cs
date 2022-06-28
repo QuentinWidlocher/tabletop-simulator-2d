@@ -1,8 +1,14 @@
+using System;
 using Godot;
 
 class SelectService : Node
 {
   private Token.Token? selectedToken;
+  public Token.Token? SelectedToken
+  {
+    get => selectedToken;
+  }
+  public event Action<Token.Token?> SelectedTokenChanged;
 
   public bool isFocused(Token.Token token)
   {
@@ -28,13 +34,15 @@ class SelectService : Node
       token.TokenTransform.MoveHandle.Visible = true;
       // token.TokenTransform.RotateHandle.Visible = true;
       // token.TokenTransform.ScaleHandle.Visible = true;
-      token.DebugLabel.DebugLabel.Visible = true;
+      // token.DebugLabel.DebugLabel.Visible = true;
       selectedToken.SelectShape.Visible = !selectedToken.IsRoot;
     }
     else
     {
       selectedToken = null;
     }
+
+    SelectedTokenChanged?.Invoke(selectedToken);
   }
 
   public void ToggleFocus(Token.Token token) => Focus(token, !isFocused(token));

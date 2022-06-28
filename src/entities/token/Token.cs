@@ -23,6 +23,18 @@ namespace Token
     #endregion
 
     #region Family Tree
+    public Token Root
+    {
+      get
+      {
+        var root = this;
+        while (!root.IsRoot)
+        {
+          root = root.Parent;
+        }
+        return root;
+      }
+    }
     public Token Parent { get => IsRoot ? this : (Token)GetParent(); }
     public List<Token> Children { get => GetChildren().OfType<Token>().ToList(); }
     public List<Token> Siblings { get => Parent.Children; }
@@ -49,6 +61,7 @@ namespace Token
     public TextureRect VisibilityToggle { get => GetNode<TextureRect>("VisibilityToggle"); }
     public TextureRect Sprite { get => GetNode<TextureRect>("Sprite"); }
     public Panel SelectShape { get => GetNode<Panel>("SelectShape"); }
+    public Label TokenName { get => GetNode<Label>("Name"); }
     #endregion
 
     private SelectService selectService { get => GetNode<SelectService>("/root/SelectService"); }
@@ -86,7 +99,7 @@ namespace Token
 
         GetTree().Root.Connect("size_changed", this, nameof(OnResize));
 
-        // RectSize = GetViewportRect().Size;
+        selectService.Focus(this, true);
       }
 
       DebugLabel.Ready();
@@ -123,7 +136,13 @@ namespace Token
     {
       TokenTransform.Process(delta);
 
-      Update();
+      // FIXME : Don't sync the name like that, maybe add a setter to Name ?
+      if (Name != TokenName.Text)
+      {
+        TokenName.Text = Name;
+      }
+
+      // Update();
     }
 
     public override void _Draw()
@@ -196,7 +215,14 @@ namespace Token
       {
         if (mouseButton.IsPressed())
         {
-          selectService.ToggleFocus(this);
+          if (IsRoot)
+          {
+            selectService.Focus(this, true);
+          }
+          else
+          {
+            selectService.ToggleFocus(this);
+          }
         }
       }
     }

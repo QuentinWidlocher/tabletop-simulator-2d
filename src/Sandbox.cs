@@ -8,9 +8,10 @@ class Sandbox : Control
   public NodePath? ElementPath;
 
   private Token.Token? element;
-  private FileDialog fileDialog;
 
   private PackedScene tokenScene = GD.Load<PackedScene>("res://nodes/Token.tscn");
+
+  private SelectService selectService { get => GetNode<SelectService>("/root/SelectService"); }
 
   private int i;
 
@@ -19,10 +20,10 @@ class Sandbox : Control
     this.AssertNotNull(ElementPath, "ElementPath");
 
     element = GetNode(ElementPath) as Token.Token;
-    fileDialog = GetParent().GetNode<FileDialog>("FileDialog");
 
     this.AssertNotNull(element, "Element");
-    this.AssertNotNull(fileDialog, "FileDialog");
+
+    selectService.Focus(element, true);
   }
 
   public override void _Process(float delta)
@@ -44,10 +45,7 @@ class Sandbox : Control
     newToken.Sprite.Texture = ResourceLoader.Load<StreamTexture>(path);
     newToken.TokenTransform.UpdateBoundingBox();
     newToken.UpdateShape();
-  }
 
-  public void OnAddTokenButtonPressed()
-  {
-    fileDialog.Popup_();
+    selectService.Focus(newToken, true);
   }
 }

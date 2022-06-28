@@ -1,11 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/Sandbox.cs" type="Script" id=1]
-[ext_resource path="res://icon_vertical.png" type="Texture" id=2]
-[ext_resource path="res://icon_horizontal.png" type="Texture" id=3]
 [ext_resource path="res://nodes/Token.tscn" type="PackedScene" id=4]
-[ext_resource path="res://icon.png" type="Texture" id=5]
-[ext_resource path="res://assets/ui-theme.tres" type="Theme" id=6]
+[ext_resource path="res://nodes/SidePanel.tscn" type="PackedScene" id=7]
 
 [node name="Root" type="Control"]
 anchor_right = 1.0
@@ -37,79 +34,4 @@ anchor_bottom = 1.0
 mouse_filter = 2
 color = Color( 0.2, 0.254902, 0.333333, 1 )
 
-[node name="Token1" parent="Grid" instance=ExtResource( 4 )]
-margin_left = -440.0
-margin_top = -165.0
-margin_right = -376.0
-margin_bottom = -101.0
-Texture = ExtResource( 2 )
-
-[node name="Token2" parent="Grid/Token1" instance=ExtResource( 4 )]
-margin_left = 26.0
-margin_top = 17.0
-margin_right = 90.0
-margin_bottom = 81.0
-Texture = ExtResource( 5 )
-
-[node name="Token3" parent="Grid" instance=ExtResource( 4 )]
-margin_left = 102.0
-margin_top = -78.0
-margin_right = 166.0
-margin_bottom = 50.0
-Texture = ExtResource( 3 )
-
-[node name="Token4" parent="Grid" instance=ExtResource( 4 )]
-margin_left = -341.0
-margin_top = 41.0
-margin_right = -277.0
-margin_bottom = 169.0
-Texture = ExtResource( 5 )
-
-[node name="SidePanel" type="ColorRect" parent="."]
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -269.0
-margin_right = -1.0
-margin_bottom = -1.0
-color = Color( 0.945098, 0.960784, 0.976471, 1 )
-
-[node name="MarginContainer" type="MarginContainer" parent="SidePanel"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="SidePanel/MarginContainer"]
-margin_right = 248.0
-margin_bottom = 579.0
-alignment = 1
-
-[node name="AddTokenButton" type="Button" parent="SidePanel/MarginContainer/VBoxContainer"]
-margin_top = 266.0
-margin_right = 248.0
-margin_bottom = 312.0
-grow_horizontal = 0
-grow_vertical = 0
-theme = ExtResource( 6 )
-text = "Add a token"
-
-[node name="FileDialog" type="FileDialog" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 99.0
-margin_top = 69.0
-margin_right = -83.0
-margin_bottom = -77.0
-rect_pivot_offset = Vector2( 255, 143 )
-theme = ExtResource( 6 )
-popup_exclusive = true
-window_title = "Open a File"
-dialog_hide_on_ok = true
-mode = 0
-access = 2
-
-[connection signal="pressed" from="SidePanel/MarginContainer/VBoxContainer/AddTokenButton" to="SandboxLogic" method="OnAddTokenButtonPressed"]
-[connection signal="file_selected" from="FileDialog" to="SandboxLogic" method="OnFileDialogFileSelected"]
+[node name="SidePanel" parent="." instance=ExtResource( 7 )]
