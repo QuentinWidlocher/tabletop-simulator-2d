@@ -3,6 +3,7 @@
 export.cfg
 
 exports
+build
 
 # Imported translations (automatically generated from CSV files)
 *.translation
