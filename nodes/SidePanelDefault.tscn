@@ -30,6 +30,7 @@ window_title = "Open a File"
 dialog_hide_on_ok = true
 mode = 0
 access = 2
+filters = PoolStringArray( "*.png" )
 
 [connection signal="pressed" from="AddTokenButton" to="." method="OnAddTokenButtonPressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="onFileDialogFileSelected"]
