@@ -14,24 +14,31 @@ size_flags_vertical = 3
 
 [node name="SandboxLogic" type="Control" parent="."]
 script = ExtResource( 1 )
-ElementPath = NodePath("../Grid")
+ElementPath = NodePath("../ScrollContainer/Grid")
 
-[node name="Grid" parent="." instance=ExtResource( 4 )]
-anchor_left = 0.0
-anchor_top = 0.0
+[node name="SidePanel" parent="." instance=ExtResource( 7 )]
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+follow_focus = true
+
+[node name="Grid" parent="ScrollContainer" instance=ExtResource( 4 )]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_left = 0.0
 margin_top = 0.0
-margin_right = 0.0
-margin_bottom = 0.0
+margin_right = 162.0
+margin_bottom = 74.0
 rect_pivot_offset = Vector2( 0, 0 )
 IsRoot = true
 
-[node name="Background" type="ColorRect" parent="Grid"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Background" type="ColorRect" parent="ScrollContainer/Grid"]
+anchor_right = 4.704
+anchor_bottom = 8.122
+margin_right = -0.0479736
+margin_bottom = -0.0280762
 mouse_filter = 2
 color = Color( 0.2, 0.254902, 0.333333, 1 )
-
-[node name="SidePanel" parent="." instance=ExtResource( 7 )]
