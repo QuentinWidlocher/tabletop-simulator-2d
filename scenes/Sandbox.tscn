@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://src/Sandbox.cs" type="Script" id=1]
+[ext_resource path="res://src/entities/token/RootToken.cs" type="Script" id=2]
 [ext_resource path="res://nodes/Token.tscn" type="PackedScene" id=4]
 [ext_resource path="res://nodes/SidePanel.tscn" type="PackedScene" id=7]
 
@@ -11,10 +11,6 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="SandboxLogic" type="Control" parent="."]
-script = ExtResource( 1 )
-ElementPath = NodePath("../Grid")
 
 [node name="SidePanel" parent="." instance=ExtResource( 7 )]
 
@@ -28,7 +24,7 @@ margin_top = 0.0
 margin_right = -267.0
 margin_bottom = 0.0
 rect_pivot_offset = Vector2( 0, 0 )
-IsRoot = true
+script = ExtResource( 2 )
 
 [node name="Background" type="ColorRect" parent="Grid"]
 anchor_right = 1.0

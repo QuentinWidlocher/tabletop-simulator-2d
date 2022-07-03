@@ -4,7 +4,7 @@ class SidePanel : ColorRect
 {
   private SelectService selectService
   {
-	get => GetNode<SelectService>("/root/SelectService");
+    get => GetNode<SelectService>("/root/SelectService");
   }
 
   public SidePanelToken SidePanelToken { get => GetNode<SidePanelToken>("Container/SidePanelToken"); }
@@ -12,31 +12,30 @@ class SidePanel : ColorRect
 
   public override void _Ready()
   {
-	selectService.SelectedTokenChanged += OnSelectedTokenChanged;
+    selectService.SelectedTokenChanged += OnSelectedTokenChanged;
   }
 
   public override void _ExitTree()
   {
-	selectService.SelectedTokenChanged -= OnSelectedTokenChanged;
+    selectService.SelectedTokenChanged -= OnSelectedTokenChanged;
   }
 
   private void OnSelectedTokenChanged(Token.Token? token)
   {
-	if (token != null)
-	{
-	  GD.Print(token.Name);
-	  if (token.IsRoot)
-	  {
-		SidePanelToken.Visible = false;
-		SidePanelDefault.Visible = true;
-	  }
-	  else
-	  {
-		SidePanelToken.Token = token;
-		SidePanelToken.Visible = true;
+    if (token != null)
+    {
+      if (token is Token.RootToken)
+      {
+        SidePanelToken.Visible = false;
+        SidePanelDefault.Visible = true;
+      }
+      else if (token is Token.BaseToken)
+      {
+        SidePanelToken.Token = (Token.BaseToken)token;
+        SidePanelToken.Visible = true;
 
-		SidePanelDefault.Visible = false;
-	  }
-	}
+        SidePanelDefault.Visible = false;
+      }
+    }
   }
 }

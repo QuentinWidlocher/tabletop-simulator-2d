@@ -13,9 +13,9 @@ class SidePanelDefault : Control
 
   private void onFileDialogFileSelected(string path)
   {
-    if (SelectService.SelectedToken != null)
+    if (SelectService.SelectedToken != null && SelectService.SelectedToken is Token.RootToken)
     {
-      var newToken = GD.Load<PackedScene>("res://nodes/Token.tscn").Instance() as Token.Token;
+      var newToken = GD.Load<PackedScene>("res://nodes/Token.tscn").Instance() as Token.BaseToken;
       newToken.RectPosition = SelectService.SelectedToken.RectPosition;
 
       StreamTexture streamTexture = ResourceLoader.Load<StreamTexture>(path);

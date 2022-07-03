@@ -17,31 +17,24 @@ class SelectService : Node
 
   public void Focus(Token.Token token, bool focus)
   {
-    if (selectedToken != null)
-    {
-      selectedToken.VisibilityToggle.Visible = false;
-      selectedToken.TokenTransform.MoveHandle.Visible = false;
-      // selectedToken.TokenTransform.RotateHandle.Visible = false;
-      // token.TokenTransform.ScaleHandle.Visible = false;
-      selectedToken.DebugLabel.DebugLabel.Visible = false;
-      selectedToken.SelectShape.Visible = false;
-    }
+    // We remove the focus from the previous token
+    selectedToken?.OnFocusChange(false);
 
     if (focus)
     {
+      // If we're giving the focus to a new token, we set it as the selected token
       selectedToken = token;
-      token.VisibilityToggle.Visible = true;
-      token.TokenTransform.MoveHandle.Visible = true;
-      // token.TokenTransform.RotateHandle.Visible = true;
-      // token.TokenTransform.ScaleHandle.Visible = true;
-      // token.DebugLabel.DebugLabel.Visible = true;
-      selectedToken.SelectShape.Visible = !selectedToken.IsRoot;
+      // and we trigger its OnFocusChange event
+      selectedToken.OnFocusChange(true);
     }
     else
     {
+      // If we're removing the focus from a token, we set it as null
+      // The first line of the method already called the OnFocusChange event of the token
       selectedToken = null;
     }
 
+    // now we trigger the event for all the listeners
     SelectedTokenChanged?.Invoke(selectedToken);
   }
 

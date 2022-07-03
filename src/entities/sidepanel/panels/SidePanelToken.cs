@@ -5,8 +5,8 @@ class SidePanelToken : Control
   public LineEdit NameInput { get => GetNode<LineEdit>("NameInput"); }
   public SelectService SelectService { get => GetNode<SelectService>("/root/SelectService"); }
 
-  private Token.Token token;
-  public Token.Token Token
+  private Token.BaseToken token;
+  public Token.BaseToken Token
   {
     get => token;
     set

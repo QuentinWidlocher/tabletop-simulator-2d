@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace Token
 {
-  class TokenTransform : NodeComponent<Token>
+  class TokenTransform : NodeComponent<BaseToken>
   {
-    public TokenTransform(Token instance) : base(instance) { }
+    public TokenTransform(BaseToken instance) : base(instance) { }
 
     public TextureRect MoveHandle { get => _instance.GetNode<TextureRect>("MoveHandle"); }
     public TextureRect RotateHandle { get => _instance.GetNode<TextureRect>("Sprite/RotateHandle"); }
